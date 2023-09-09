@@ -10,7 +10,7 @@ type ComicInfo struct {
 	// General
 	Title      string `xml:"Title,omitempty"`
 	Series     string `xml:"Series,omitempty"`
-	Number     int    `xml:"Number,omitempty"`
+	Number     string `xml:"Number,omitempty"`
 	Web        string `xml:"Web,omitempty"`
 	Genre      string `xml:"Genre,omitempty"`
 	PageCount  int    `xml:"PageCount,omitempty"`
@@ -27,4 +27,6 @@ type ComicInfo struct {
 	Tags       string `xml:"Tags,omitempty"`
 	Notes      string `xml:"Notes,omitempty"`
 	Manga      string `xml:"Manga,omitempty"`
+	OrigTitle  string `xml:"OrigTitle,omitempty"`
+	OrigIndex  int    `xml:"OrigIndex,omitempty"`
 }

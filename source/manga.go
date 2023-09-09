@@ -97,11 +97,19 @@ func (m *Manga) String() string {
 }
 
 func (m *Manga) Dirname() string {
-	return util.SanitizeFilename(m.Name)
+	return util.SanitizeFilenameWows(m.Name)
+}
+
+func (m *Manga) SourceDirname() string {
+	return util.SanitizeFilenameWows(m.Source.Name())
 }
 
 func (m *Manga) peekPath() string {
 	path := where.Downloads()
+
+	if viper.GetBool(key.DownloaderCreateSourceDir) {
+		path = filepath.Join(path, m.SourceDirname())
+	}
 
 	if viper.GetBool(key.DownloaderCreateMangaDir) {
 		path = filepath.Join(path, m.Dirname())

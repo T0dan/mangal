@@ -71,13 +71,13 @@ func Customs() []*Provider {
 }
 
 func Get(name string) (*Provider, bool) {
-	for _, provider := range Builtins() {
+	for _, provider := range Customs() {
 		if provider.Name == name {
 			return provider, true
 		}
 	}
-
-	for _, provider := range Customs() {
+	
+	for _, provider := range Builtins() {
 		if provider.Name == name {
 			return provider, true
 		}

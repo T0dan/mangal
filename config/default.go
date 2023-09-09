@@ -155,6 +155,11 @@ Available variables:
 Do no turn it off unless you have some issues`,
 	},
 	{
+		key.DownloaderCreateSourceDir,
+		true,
+		`Create a subdirectory for each Source`,
+	},
+	{
 		key.DownloaderCreateMangaDir,
 		true,
 		`Create a subdirectory for each manga`,

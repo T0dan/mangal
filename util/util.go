@@ -27,9 +27,25 @@ var replacers = []lo.Tuple2[*regexp.Regexp, string]{
 	{regexp.MustCompile(`^[_\-.]+|[_\-.]+$`), ""},
 }
 
+// replacers is a list of regexp.Regexp pairs that will be used to sanitize filenames without whitespaces.
+var replacersWows = []lo.Tuple2[*regexp.Regexp, string]{
+	{regexp.MustCompile(`[\\/<>:;"'|?!*{}#%&^+,~]`), "_"},
+	{regexp.MustCompile(`__+`), "_"},
+	{regexp.MustCompile(`^[_\-.]+|[_\-.]+$`), ""},
+}
+
 // SanitizeFilename will remove all invalid characters from a path.
 func SanitizeFilename(filename string) string {
 	for _, re := range replacers {
+		filename = re.A.ReplaceAllString(filename, re.B)
+	}
+
+	return filename
+}
+
+// SanitizeFilename will remove all invalid characters from a path without whitespaces.
+func SanitizeFilenameWows(filename string) string {
+	for _, re := range replacersWows {
 		filename = re.A.ReplaceAllString(filename, re.B)
 	}
 

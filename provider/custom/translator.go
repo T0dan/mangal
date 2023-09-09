@@ -141,7 +141,10 @@ func pageFromTable(table *lua.LTable, chapter *source.Chapter) (page *source.Pag
 		return
 	}
 
-	page.Extension = filepath.Ext(page.URL)
+	ext := filepath.Ext(page.URL)
+	// remove some query params from the extension
+	ext = strings.Split(ext, "?")[0]
+	page.Extension = ext
 	chapter.Pages = append(chapter.Pages, page)
 	return
 }

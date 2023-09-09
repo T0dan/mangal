@@ -57,10 +57,10 @@ func Metadata(mangaPath string) error {
 		}
 
 		chap := &source.Chapter{
-			Name:  comicInfo.Title,
+			Name:  comicInfo.OrigTitle,
 			Manga: manga,
 			URL:   comicInfo.Web,
-			Index: uint16(comicInfo.Number),
+			Index: uint16(comicInfo.OrigIndex),
 		}
 		manga.Chapters = append(manga.Chapters, chap)
 		chaptersPaths[chap] = chapter.path

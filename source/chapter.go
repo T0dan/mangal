@@ -2,6 +2,14 @@ package source
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"sync"
+	"time"
+	"regexp"
+	"strconv"
+
 	"github.com/dustin/go-humanize"
 	"github.com/metafates/mangal/constant"
 	"github.com/metafates/mangal/filesystem"
@@ -10,11 +18,6 @@ import (
 	"github.com/metafates/mangal/util"
 	"github.com/samber/mo"
 	"github.com/spf13/viper"
-	"os"
-	"path/filepath"
-	"strings"
-	"sync"
-	"time"
 )
 
 // Chapter is a struct that represents a chapter of a manga.
@@ -124,7 +127,7 @@ func (c *Chapter) SizeHuman() string {
 }
 
 func (c *Chapter) Filename() (filename string) {
-	filename = util.SanitizeFilename(c.formattedName())
+	filename = util.SanitizeFilenameWows(c.formattedName())
 
 	// plain format assumes that chapter is a directory with images
 	// rather than a single file. So no need to add extension to it
@@ -148,7 +151,7 @@ func (c *Chapter) IsDownloaded() bool {
 
 func (c *Chapter) path(relativeTo string, createVolumeDir bool) (path string, err error) {
 	if createVolumeDir {
-		path = filepath.Join(path, util.SanitizeFilename(c.Volume))
+		path = filepath.Join(path, util.SanitizeFilenameWows(c.Volume))
 		err = filesystem.Api().MkdirAll(path, os.ModePerm)
 		if err != nil {
 			return
@@ -192,13 +195,36 @@ func (c *Chapter) ComicInfo() *ComicInfo {
 		}
 	} // empty dates will be omitted
 
+	re := regexp.MustCompile(`c(\d+)\.?(\d*) \(web\)`)
+	re_match := re.FindStringSubmatch(c.Name)
+	chapter_num := strconv.FormatUint(uint64(c.Index), 10)
+	if re_match != nil {
+		if s, err := strconv.ParseUint(re_match[1], 10, 64); err == nil {
+			chapter_num = strconv.FormatUint(s, 10)
+			if re_match[2] != "" {
+				chapter_num = chapter_num + "." + re_match[2]
+			}
+		}
+	}
+
+	re = regexp.MustCompile(`c\d+\.?\d* \(web\) \[(.*?)\]`)
+	re_match = re.FindStringSubmatch(c.Name)
+	chapter_title := c.Name
+	if re_match != nil {
+		if re_match[1] == "" {
+			chapter_title = " "
+		} else {
+			chapter_title = re_match[1]
+		}
+	}
+
 	return &ComicInfo{
 		XmlnsXsd: "http://www.w3.org/2001/XMLSchema",
 		XmlnsXsi: "http://www.w3.org/2001/XMLSchema-instance",
 
-		Title:      c.Name,
+		Title:      chapter_title,
 		Series:     c.Manga.Name,
-		Number:     int(c.Index),
+		Number:     chapter_num,
 		Web:        c.URL,
 		Genre:      strings.Join(c.Manga.Metadata.Genres, ","),
 		PageCount:  len(c.Pages),
@@ -215,5 +241,7 @@ func (c *Chapter) ComicInfo() *ComicInfo {
 		Tags:       strings.Join(c.Manga.Metadata.Tags, ","),
 		Notes:      "Downloaded with Mangal. https://github.com/metafates/mangal",
 		Manga:      "YesAndRightToLeft",
+		OrigTitle:  c.Name,
+		OrigIndex:  int(c.Index),
 	}
 }

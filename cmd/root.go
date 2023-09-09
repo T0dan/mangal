@@ -44,11 +44,11 @@ func init() {
 	lo.Must0(rootCmd.RegisterFlagCompletionFunc("source", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var sources []string
 
-		for _, p := range provider.Builtins() {
+		for _, p := range provider.Customs() {
 			sources = append(sources, p.Name)
 		}
 
-		for _, p := range provider.Customs() {
+		for _, p := range provider.Builtins() {
 			sources = append(sources, p.Name)
 		}
 
