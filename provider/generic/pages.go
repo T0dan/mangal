@@ -1,14 +1,17 @@
 package generic
 
 import (
+	"net/http"
+
 	"github.com/gocolly/colly/v2"
 	"github.com/metafates/mangal/source"
-	"net/http"
+	"github.com/metafates/mangal/util"
 )
 
 // PagesOf given source.Chapter
 func (s *Scraper) PagesOf(chapter *source.Chapter) ([]*source.Page, error) {
-	if pages, ok := s.pages[chapter.URL]; ok {
+	address_path := util.UrlGetPath(chapter.URL)
+	if pages, ok := s.pages[address_path]; ok {
 		return pages, nil
 	}
 
@@ -22,5 +25,5 @@ func (s *Scraper) PagesOf(chapter *source.Chapter) ([]*source.Page, error) {
 
 	s.pagesCollector.Wait()
 
-	return s.pages[chapter.URL], nil
+	return s.pages[address_path], nil
 }

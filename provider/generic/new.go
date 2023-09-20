@@ -1,14 +1,16 @@
 package generic
 
 import (
+	"path/filepath"
+	"strings"
+	"time"
+
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
 	"github.com/metafates/mangal/constant"
 	"github.com/metafates/mangal/source"
+	"github.com/metafates/mangal/util"
 	"github.com/metafates/mangal/where"
-	"path/filepath"
-	"strings"
-	"time"
 )
 
 // New generates a new scraper with given configuration
@@ -42,6 +44,7 @@ func New(conf *Configuration) source.Source {
 	mangasCollector.OnHTML("html", func(e *colly.HTMLElement) {
 		elements := e.DOM.Find(s.config.MangaExtractor.Selector)
 		path := e.Request.URL.String()
+		path = util.UrlGetPath(path)
 		s.mangas[path] = make([]*source.Manga, elements.Length())
 
 		elements.Each(func(i int, selection *goquery.Selection) {
@@ -80,6 +83,7 @@ func New(conf *Configuration) source.Source {
 	chaptersCollector.OnHTML("html", func(e *colly.HTMLElement) {
 		elements := e.DOM.Find(s.config.ChapterExtractor.Selector)
 		path := e.Request.AbsoluteURL(e.Request.URL.Path)
+		path = util.UrlGetPath(path)
 		s.chapters[path] = make([]*source.Chapter, elements.Length())
 		manga := e.Request.Ctx.GetAny("manga").(*source.Manga)
 
@@ -91,6 +95,7 @@ func New(conf *Configuration) source.Source {
 				Name:   s.config.ChapterExtractor.Name(selection),
 				URL:    url,
 				Index:  uint16(e.Index),
+				Number: s.config.ChapterExtractor.Number(selection),
 				Pages:  make([]*source.Page, 0),
 				ID:     filepath.Base(url),
 				Manga:  manga,
@@ -118,6 +123,7 @@ func New(conf *Configuration) source.Source {
 	pagesCollector.OnHTML("html", func(e *colly.HTMLElement) {
 		elements := e.DOM.Find(s.config.PageExtractor.Selector)
 		path := e.Request.AbsoluteURL(e.Request.URL.Path)
+		path = util.UrlGetPath(path)
 		s.pages[path] = make([]*source.Page, elements.Length())
 		chapter := e.Request.Ctx.GetAny("chapter").(*source.Chapter)
 

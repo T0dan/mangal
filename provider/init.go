@@ -6,6 +6,7 @@ import (
 	"github.com/metafates/mangal/provider/manganato"
 	"github.com/metafates/mangal/provider/manganelo"
 	"github.com/metafates/mangal/provider/mangapill"
+	"github.com/metafates/mangal/provider/onepiecetube"
 	"github.com/metafates/mangal/source"
 )
 
@@ -17,6 +18,13 @@ var builtinProviders = []*Provider{
 		Name: mangadex.Name,
 		CreateSource: func() (source.Source, error) {
 			return mangadex.New(), nil
+		},
+	},
+	{
+		ID:   onepiecetube.ID,
+		Name: onepiecetube.Name,
+		CreateSource: func() (source.Source, error) {
+			return onepiecetube.New(), nil
 		},
 	},
 }

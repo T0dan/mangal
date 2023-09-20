@@ -3,12 +3,13 @@ package key
 // DefinedFieldsCount is the number of fields defined in this package.
 // You have to manually update this number when you add a new field
 // to check later if every field has a defined default value
-const DefinedFieldsCount = 54
+const DefinedFieldsCount = 55
 
 const (
 	DownloaderPath                = "downloader.path"
 	DownloaderChapterNameTemplate = "downloader.chapter_name_template"
 	DownloaderAsync               = "downloader.async"
+	DownloaderVolSafeFilename     = "downloader.volsafe_filename"
 	DownloaderCreateSourceDir     = "downloader.create_source_dir"
 	DownloaderCreateMangaDir      = "downloader.create_manga_dir"
 	DownloaderCreateVolumeDir     = "downloader.create_volume_dir"

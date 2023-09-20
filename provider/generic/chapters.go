@@ -1,14 +1,17 @@
 package generic
 
 import (
+	"net/http"
+
 	"github.com/gocolly/colly/v2"
 	"github.com/metafates/mangal/source"
-	"net/http"
+	"github.com/metafates/mangal/util"
 )
 
 // ChaptersOf given source.Manga
 func (s *Scraper) ChaptersOf(manga *source.Manga) ([]*source.Chapter, error) {
-	if chapters, ok := s.chapters[manga.URL]; ok {
+	address_path := util.UrlGetPath(manga.URL)
+	if chapters, ok := s.chapters[address_path]; ok {
 		return chapters, nil
 	}
 
@@ -24,7 +27,7 @@ func (s *Scraper) ChaptersOf(manga *source.Manga) ([]*source.Chapter, error) {
 
 	if s.config.ReverseChapters {
 		// reverse chapters
-		chapters := s.chapters[manga.URL]
+		chapters := s.chapters[address_path]
 		reversed := make([]*source.Chapter, len(chapters))
 		for i, chapter := range chapters {
 			reversed[len(chapters)-i-1] = chapter
@@ -32,8 +35,8 @@ func (s *Scraper) ChaptersOf(manga *source.Manga) ([]*source.Chapter, error) {
 			chapter.Index++
 		}
 
-		s.chapters[manga.URL] = reversed
+		s.chapters[address_path] = reversed
 	}
 
-	return s.chapters[manga.URL], nil
+	return s.chapters[address_path], nil
 }

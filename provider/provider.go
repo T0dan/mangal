@@ -1,14 +1,15 @@
 package provider
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/metafates/mangal/filesystem"
 	"github.com/metafates/mangal/provider/custom"
 	"github.com/metafates/mangal/source"
 	"github.com/metafates/mangal/util"
 	"github.com/metafates/mangal/where"
 	"github.com/samber/lo"
-	"os"
-	"path/filepath"
 )
 
 type Provider struct {
@@ -71,13 +72,13 @@ func Customs() []*Provider {
 }
 
 func Get(name string) (*Provider, bool) {
-	for _, provider := range Customs() {
+	for _, provider := range Builtins() {
 		if provider.Name == name {
 			return provider, true
 		}
 	}
-	
-	for _, provider := range Builtins() {
+
+	for _, provider := range Customs() {
 		if provider.Name == name {
 			return provider, true
 		}

@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strings"
+
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/metafates/mangal/color"
 	"github.com/metafates/mangal/constant"
@@ -18,8 +21,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"os"
-	"strings"
 )
 
 func init() {
@@ -44,11 +45,11 @@ func init() {
 	lo.Must0(rootCmd.RegisterFlagCompletionFunc("source", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var sources []string
 
-		for _, p := range provider.Customs() {
+		for _, p := range provider.Builtins() {
 			sources = append(sources, p.Name)
 		}
 
-		for _, p := range provider.Builtins() {
+		for _, p := range provider.Customs() {
 			sources = append(sources, p.Name)
 		}
 

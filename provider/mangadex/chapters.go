@@ -2,13 +2,14 @@ package mangadex
 
 import (
 	"fmt"
+	"net/url"
+	"strconv"
+
 	"github.com/darylhjd/mangodex"
 	"github.com/metafates/mangal/key"
 	"github.com/metafates/mangal/source"
 	"github.com/spf13/viper"
 	"golang.org/x/exp/slices"
-	"net/url"
-	"strconv"
 )
 
 func (m *Mangadex) ChaptersOf(manga *source.Manga) ([]*source.Chapter, error) {
@@ -73,9 +74,15 @@ func (m *Mangadex) ChaptersOf(manga *source.Manga) ([]*source.Chapter, error) {
 			if chapter.Attributes.Volume != nil {
 				volume = fmt.Sprintf("Vol.%s", *chapter.Attributes.Volume)
 			}
+
+			var number string
+			if chapter.Attributes.Chapter != nil {
+				number = *chapter.Attributes.Chapter
+			}
 			chapters = append(chapters, &source.Chapter{
 				Name:   name,
 				Index:  uint16(i),
+				Number: number,
 				ID:     chapter.ID,
 				URL:    fmt.Sprintf("https://mangadex.org/chapter/%s", chapter.ID),
 				Manga:  manga,

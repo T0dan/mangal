@@ -3,16 +3,17 @@ package config
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
+	"strconv"
+	"strings"
+	"text/template"
+
 	"github.com/metafates/mangal/color"
 	"github.com/metafates/mangal/constant"
 	"github.com/metafates/mangal/key"
 	"github.com/metafates/mangal/style"
 	"github.com/samber/lo"
 	"github.com/spf13/viper"
-	"reflect"
-	"strconv"
-	"strings"
-	"text/template"
 )
 
 // Field represents a single config field
@@ -142,6 +143,8 @@ Path forbidden symbols will be replaced with "_"
 Available variables:
 {index}          - index of the chapters
 {padded-index}   - same as index but padded with leading zeros
+{number}         - number of the chapters
+{padded-number}  - same as number but padded with leading zeros
 {chapters-count} - total number of chapters
 {chapter}        - name of the chapter
 {manga}          - name of the manga
@@ -153,6 +156,11 @@ Available variables:
 		true,
 		`Use asynchronous downloader (faster)
 Do no turn it off unless you have some issues`,
+	},
+	{
+		key.DownloaderVolSafeFilename,
+		true,
+		`remove all substrings that could be interpreted as a volume`,
 	},
 	{
 		key.DownloaderCreateSourceDir,

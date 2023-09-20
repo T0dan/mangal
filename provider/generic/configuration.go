@@ -1,8 +1,9 @@
 package generic
 
 import (
-	"github.com/PuerkitoBio/goquery"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 // Extractor is responsible for finding specified elements by selector and extracting required data from them
@@ -15,6 +16,8 @@ type Extractor struct {
 	URL func(*goquery.Selection) string
 	// Volume function to get volume from element found by selector. Used by chapters extractor
 	Volume func(*goquery.Selection) string
+	// Number function to get Number from element found by selector. Used by chapters extractor
+	Number func(*goquery.Selection) string
 	// Cover function to get cover from element found by selector. Used by manga extractor
 	Cover func(*goquery.Selection) string
 }

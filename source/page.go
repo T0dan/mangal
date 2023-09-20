@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	_ "image/gif"
+	"io"
+	"net/http"
+
 	"github.com/metafates/mangal/constant"
 	"github.com/metafates/mangal/log"
 	"github.com/metafates/mangal/network"
 	"github.com/metafates/mangal/util"
-	_ "image/gif"
-	"io"
-	"net/http"
 )
 
 // Page represents a page in a chapter
@@ -96,6 +97,12 @@ func (p *Page) Download() error {
 
 	p.Contents = bytes.NewBuffer(buf)
 	p.Size = uint64(util.Max(contentLength, 0))
+
+	if p.Contents == nil {
+		err = errors.New("no data downloaded")
+		log.Error(err)
+		return err
+	}
 
 	log.Tracef("Page #%d downloaded", p.Index)
 	return nil

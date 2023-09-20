@@ -2,18 +2,33 @@ package util
 
 import (
 	"fmt"
-	"github.com/metafates/mangal/constant"
-	"github.com/metafates/mangal/filesystem"
-	"github.com/samber/lo"
-	"golang.org/x/exp/constraints"
-	"golang.org/x/term"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
 	"runtime"
 	"strings"
+
+	"github.com/metafates/mangal/constant"
+	"github.com/metafates/mangal/filesystem"
+	"github.com/samber/lo"
+	"golang.org/x/exp/constraints"
+	"golang.org/x/term"
 )
+
+// Truncate url to path and
+func UrlGetPath(s string) string {
+	parsed_url, _ := url.Parse(s)
+	path := parsed_url.Path
+	if parsed_url.RawQuery != "" {
+		path = path + "&" + parsed_url.RawQuery
+	}
+	if parsed_url.RawFragment != "" {
+		path = path + "#" + parsed_url.RawFragment
+	}
+	return path
+}
 
 // PadZero pads a number with leading zeros.
 func PadZero(s string, l int) string {
@@ -46,6 +61,22 @@ func SanitizeFilename(filename string) string {
 // SanitizeFilename will remove all invalid characters from a path without whitespaces.
 func SanitizeFilenameWows(filename string) string {
 	for _, re := range replacersWows {
+		filename = re.A.ReplaceAllString(filename, re.B)
+	}
+
+	return filename
+}
+
+// volReplacers is a list of regexp.Regexp pairs that will be used to sanitize filenames.
+var volReplacers = []lo.Tuple2[*regexp.Regexp, string]{
+	{regexp.MustCompile(`\(?[vV]\.?\s*\d+\)?`), ""},
+	{regexp.MustCompile(`\(?[vV]ol\.?\s*\d+\)?`), ""},
+	{regexp.MustCompile(`\(?[vV]olume\.?\s*\d+\)?`), ""},
+}
+
+// VolSafeFileName will remove all substrings that could be interpreted as a volume number.
+func VolSafeFileName(filename string) string {
+	for _, re := range volReplacers {
 		filename = re.A.ReplaceAllString(filename, re.B)
 	}
 

@@ -2,11 +2,13 @@ package manganelo
 
 import (
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
-	"github.com/metafates/mangal/provider/generic"
 	"net/url"
+	"regexp"
 	"strings"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/metafates/mangal/provider/generic"
 )
 
 var Config = &generic.Configuration{
@@ -43,6 +45,16 @@ var Config = &generic.Configuration{
 				name = strings.Join(splitted[1:], " ")
 			}
 			return name
+		},
+		Number: func(selection *goquery.Selection) string {
+			number := selection.Find(".chapter-name").Text()
+			re := regexp.MustCompile(`Chapter (\d+\.?\d*)`)
+			re_match := re.FindStringSubmatch(number)
+			if re_match != nil {
+				return re_match[1]
+			} else {
+				return ""
+			}
 		},
 		URL: func(selection *goquery.Selection) string {
 			return selection.Find(".chapter-name").AttrOr("href", "")

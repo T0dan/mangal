@@ -2,11 +2,13 @@ package mangapill
 
 import (
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
-	"github.com/metafates/mangal/provider/generic"
 	"net/url"
+	"regexp"
 	"strings"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/metafates/mangal/provider/generic"
 )
 
 var Config = &generic.Configuration{
@@ -16,7 +18,6 @@ var Config = &generic.Configuration{
 	ReverseChapters: true,
 	BaseURL:         "https://mangapill.com",
 	GenerateSearchURL: func(query string) string {
-		query = strings.ReplaceAll(query, " ", "+")
 		query = strings.ToLower(query)
 		query = strings.TrimSpace(query)
 		template := "https://mangapill.com/search?q=%s&type=&status="
@@ -41,6 +42,16 @@ var Config = &generic.Configuration{
 		Selector: "div[data-filter-list] a",
 		Name: func(selection *goquery.Selection) string {
 			return strings.TrimSpace(selection.Text())
+		},
+		Number: func(selection *goquery.Selection) string {
+			number := selection.Text()
+			re := regexp.MustCompile(`Chapter (\d+\.?\d*)`)
+			re_match := re.FindStringSubmatch(number)
+			if re_match != nil {
+				return re_match[1]
+			} else {
+				return ""
+			}
 		},
 		URL: func(selection *goquery.Selection) string {
 			return selection.AttrOr("href", "")

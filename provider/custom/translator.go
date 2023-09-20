@@ -2,13 +2,14 @@ package custom
 
 import (
 	"fmt"
-	"github.com/metafates/mangal/source"
-	"github.com/samber/lo"
-	lua "github.com/yuin/gopher-lua"
 	"net/url"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/metafates/mangal/source"
+	"github.com/samber/lo"
+	lua "github.com/yuin/gopher-lua"
 )
 
 type mapping lo.Tuple4[lua.LValueType, bool, func(string) error, string]
@@ -92,6 +93,7 @@ func chapterFromTable(table *lua.LTable, manga *source.Manga, index uint16) (cha
 		"name":          {A: lua.LTString, B: true, C: func(v string) error { chapter.Name = v; return nil }},
 		"url":           {A: lua.LTString, B: true, C: func(v string) error { chapter.URL = v; return nil }},
 		"volume":        {A: lua.LTString, B: false, C: func(v string) error { chapter.Volume = v; return nil }},
+		"number":        {A: lua.LTString, B: false, C: func(v string) error { chapter.Number = v; return nil }},
 		"manga_summary": {A: lua.LTString, B: false, C: func(v string) error { manga.Metadata.Summary = v; return nil }},
 		"manga_genres": {A: lua.LTString, B: false, C: func(v string) error {
 			manga.Metadata.Genres = lo.Map(strings.Split(v, ","), func(genre string, _ int) string {

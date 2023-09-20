@@ -1,8 +1,9 @@
 package util
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestPadZero(t *testing.T) {
@@ -103,6 +104,68 @@ func TestSanitizeFilename(t *testing.T) {
 			result := SanitizeFilename(validFilename)
 			Convey("Then the result should be 'valid-file-name.txt'", func() {
 				So(result, ShouldEqual, validFilename)
+			})
+		})
+	})
+}
+
+func TestVolSafeFilename(t *testing.T) {
+	invalidFilename := "test123 (v1)"
+	Convey("Given a string "+invalidFilename, t, func() {
+		Convey("When the string is sanitized", func() {
+			result := VolSafeFileName(invalidFilename)
+			Convey("Then the result should be 'test123 '", func() {
+				So(result, ShouldEqual, "test123 ")
+			})
+		})
+	})
+
+	invalidFilename = "test123 (v.  1)"
+	Convey("Given a string "+invalidFilename, t, func() {
+		Convey("When the string is sanitized", func() {
+			result := VolSafeFileName(invalidFilename)
+			Convey("Then the result should be 'test123 '", func() {
+				So(result, ShouldEqual, "test123 ")
+			})
+		})
+	})
+
+	invalidFilename = "test123 v.1"
+	Convey("Given a string "+invalidFilename, t, func() {
+		Convey("When the string is sanitized", func() {
+			result := VolSafeFileName(invalidFilename)
+			Convey("Then the result should be 'test123 '", func() {
+				So(result, ShouldEqual, "test123 ")
+			})
+		})
+	})
+
+	invalidFilename = "test123 (V.1)"
+	Convey("Given a string "+invalidFilename, t, func() {
+		Convey("When the string is sanitized", func() {
+			result := VolSafeFileName(invalidFilename)
+			Convey("Then the result should be 'test123 '", func() {
+				So(result, ShouldEqual, "test123 ")
+			})
+		})
+	})
+
+	invalidFilename = "test123 (Vol. 1)"
+	Convey("Given a string "+invalidFilename, t, func() {
+		Convey("When the string is sanitized", func() {
+			result := VolSafeFileName(invalidFilename)
+			Convey("Then the result should be 'test123 '", func() {
+				So(result, ShouldEqual, "test123 ")
+			})
+		})
+	})
+
+	invalidFilename = "test123 (Volume    1)"
+	Convey("Given a string "+invalidFilename, t, func() {
+		Convey("When the string is sanitized", func() {
+			result := VolSafeFileName(invalidFilename)
+			Convey("Then the result should be 'test123 '", func() {
+				So(result, ShouldEqual, "test123 ")
 			})
 		})
 	})
