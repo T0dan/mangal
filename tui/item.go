@@ -2,6 +2,9 @@ package tui
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/metafates/mangal/anilist"
 	"github.com/metafates/mangal/history"
 	"github.com/metafates/mangal/icon"
@@ -9,7 +12,6 @@ import (
 	"github.com/metafates/mangal/provider"
 	"github.com/metafates/mangal/source"
 	"github.com/metafates/mangal/style"
-	"strings"
 )
 
 type listItem struct {
@@ -38,6 +40,13 @@ func (t *listItem) Title() (title string) {
 	switch e := t.internal.(type) {
 	case *source.Chapter:
 		var sb = strings.Builder{}
+
+		number := e.Number
+		if number == "" {
+			number = "I " + strconv.FormatInt(int64(e.Index), 10)
+		}
+
+		sb.WriteString(style.Bold(fmt.Sprintf("%-8s", number)))
 
 		sb.WriteString(t.FilterValue())
 		if e.Volume != "" {
