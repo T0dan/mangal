@@ -337,6 +337,21 @@ Use "any" to show all languages`,
 		"The token used by the Mangaplus app api",
 	},
 	{
+		key.MangaplusAppApiOs,
+		"android",
+		"The os type used for the Mangaplus app api",
+	},
+	{
+		key.MangaplusAppApiOsVer,
+		"29",
+		"The os version used for the Mangaplus app api",
+	},
+	{
+		key.MangaplusAppApiVer,
+		"1917",
+		"The app version used for the Mangaplus app api",
+	},
+	{
 		key.InstallerUser,
 		"metafates",
 		"Custom scrapers repository owner",

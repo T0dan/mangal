@@ -2,17 +2,19 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/metafates/mangal/color"
-	"github.com/metafates/mangal/constant"
-	"github.com/metafates/mangal/key"
-	"github.com/metafates/mangal/tui"
-	"github.com/metafates/mangal/util"
-	"github.com/spf13/viper"
 	"os"
 	"os/user"
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"github.com/metafates/mangal/color"
+	"github.com/metafates/mangal/constant"
+	"github.com/metafates/mangal/key"
+	"github.com/metafates/mangal/provider/mangaplus"
+	"github.com/metafates/mangal/tui"
+	"github.com/metafates/mangal/util"
+	"github.com/spf13/viper"
 
 	"github.com/metafates/mangal/filesystem"
 	"github.com/metafates/mangal/icon"
@@ -193,5 +195,35 @@ var sourcesGenCmd = &cobra.Command{
 		handleErr(err)
 
 		cmd.Println(target)
+	},
+}
+
+func init() {
+	sourcesCmd.AddCommand(sourcesMangaplusGenerateApiKeyCmd)
+}
+
+var sourcesMangaplusGenerateApiKeyCmd = &cobra.Command{
+	Use:   "mp_gen_api_key",
+	Short: "Generate api key for mangaplus web api.",
+	Long:  `Generate api key for mangaplus web api.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if mp_provider, ok := provider.Get("MangaPlus"); ok {
+			if mp_source, err := mp_provider.CreateSource(); err == nil {
+				mp := mp_source.(*mangaplus.Mangaplus)
+				err := mp.Generate_App_Secret()
+				if err != nil {
+					fmt.Printf(
+						"%s genrating Mangaplus app secret: %s\n",
+						style.Fg(color.Red)(icon.Get(icon.Fail)),
+						style.Fg(color.Yellow)(err.Error()),
+					)
+				} else {
+					fmt.Printf(
+						"%s genrating Mangaplus app secret\n",
+						style.Fg(color.Green)(icon.Get(icon.Success)),
+					)
+				}
+			}
+		}
 	},
 }

@@ -3,15 +3,16 @@ package update
 import (
 	"bytes"
 	"encoding/json"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/metafates/mangal/constant"
 	"github.com/metafates/mangal/converter/cbz"
 	"github.com/metafates/mangal/filesystem"
 	"github.com/metafates/mangal/log"
 	"github.com/metafates/mangal/source"
 	"github.com/metafates/mangal/util"
-	"os"
-	"path/filepath"
-	"strings"
 )
 
 func Metadata(mangaPath string) error {
@@ -57,10 +58,11 @@ func Metadata(mangaPath string) error {
 		}
 
 		chap := &source.Chapter{
-			Name:  comicInfo.OrigTitle,
-			Manga: manga,
-			URL:   comicInfo.Web,
-			Index: uint16(comicInfo.OrigIndex),
+			Name:   comicInfo.OrigTitle,
+			Number: comicInfo.Number,
+			Manga:  manga,
+			URL:    comicInfo.Web,
+			Index:  uint16(comicInfo.OrigIndex),
 		}
 		manga.Chapters = append(manga.Chapters, chap)
 		chaptersPaths[chap] = chapter.path

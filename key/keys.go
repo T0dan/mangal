@@ -3,7 +3,7 @@ package key
 // DefinedFieldsCount is the number of fields defined in this package.
 // You have to manually update this number when you add a new field
 // to check later if every field has a defined default value
-const DefinedFieldsCount = 57
+const DefinedFieldsCount = 60
 
 const (
 	DownloaderPath                = "downloader.path"
@@ -70,6 +70,9 @@ const (
 const (
 	MangaplusUseAppApi   = "mangaplus.use_app_api"
 	MangaplusAppApiToken = "mangaplus.app_api_token"
+	MangaplusAppApiOs    = "mangaplus.app_api_os"
+	MangaplusAppApiOsVer = "mangaplus.app_api_os_ver"
+	MangaplusAppApiVer   = "mangaplus.app_api_ver"
 )
 
 const (

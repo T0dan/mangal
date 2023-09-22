@@ -14,7 +14,28 @@ func (m *Mangaplus) PagesOf(chapter *source.Chapter) ([]*source.Page, error) {
 	)
 
 	if m.use_app_api {
+		viewer, err := m.GetAppViewer(chapter.ID)
+		if err != nil {
+			log.Error(err)
+			return nil, err
+		}
 
+		_ = viewer
+
+		for i, page := range viewer.Pages {
+			if page.Page != nil && page.Page.ImagePage != "" {
+				ext := filepath.Ext(page.Page.ImagePage)
+				// remove some query params from the extension
+				ext = strings.Split(ext, "?")[0]
+
+				pages = append(pages, &source.Page{
+					URL:       page.Page.ImagePage,
+					Index:     uint16(i),
+					Chapter:   chapter,
+					Extension: ext,
+				})
+			}
+		}
 	} else {
 		viewer, err := m.GetWebViewer(chapter.ID)
 		if err != nil {
