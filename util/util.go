@@ -1,6 +1,7 @@
 package util
 
 import (
+	"encoding/hex"
 	"fmt"
 	"net/url"
 	"os"
@@ -12,10 +13,40 @@ import (
 
 	"github.com/metafates/mangal/constant"
 	"github.com/metafates/mangal/filesystem"
+	"github.com/metafates/mangal/log"
+	"github.com/metafates/mangal/where"
 	"github.com/samber/lo"
 	"golang.org/x/exp/constraints"
 	"golang.org/x/term"
 )
+
+// Decrypt mangaplus images
+func MangaplusDecryptImage(data *[]byte, key string) {
+	key_buf, err := hex.DecodeString(key)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	a := len(key_buf)
+	for s := 0; s < len(*data); s++ {
+		(*data)[s] ^= key_buf[s%a]
+	}
+	return
+}
+
+// Writes string to file in log directory
+func WriteStringToFile(s string, f string) {
+	logsPath := where.Logs()
+	filePath := filepath.Join(logsPath, f)
+	data := []byte(s)
+	os.WriteFile(filePath, data, 0644)
+}
+
+func WriteBytesToFile(d []byte, f string) {
+	logsPath := where.Logs()
+	filePath := filepath.Join(logsPath, f)
+	os.WriteFile(filePath, d, 0644)
+}
 
 // Truncate url to path and
 func UrlGetPath(s string) string {
@@ -37,14 +68,15 @@ func PadZero(s string, l int) string {
 
 // replacers is a list of regexp.Regexp pairs that will be used to sanitize filenames.
 var replacers = []lo.Tuple2[*regexp.Regexp, string]{
-	{regexp.MustCompile(`[\\/<>:;"'|?!*{}#%&^+,~\s]`), "_"},
+	{regexp.MustCompile(`[\s]`), "_"},
+	{regexp.MustCompile(`[\\/<>:;"'|?!*{}#%&^+,~]`), ""},
 	{regexp.MustCompile(`__+`), "_"},
 	{regexp.MustCompile(`^[_\-.]+|[_\-.]+$`), ""},
 }
 
 // replacers is a list of regexp.Regexp pairs that will be used to sanitize filenames without whitespaces.
 var replacersWows = []lo.Tuple2[*regexp.Regexp, string]{
-	{regexp.MustCompile(`[\\/<>:;"'|?!*{}#%&^+,~]`), "_"},
+	{regexp.MustCompile(`[\\/<>:;"'|?!*{}#%&^+,~]`), ""},
 	{regexp.MustCompile(`__+`), "_"},
 	{regexp.MustCompile(`^[_\-.]+|[_\-.]+$`), ""},
 }

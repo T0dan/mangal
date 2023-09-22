@@ -327,6 +327,16 @@ Use "any" to show all languages`,
 		"Show chapters that cannot be downloaded",
 	},
 	{
+		key.MangaplusUseAppApi,
+		false,
+		"Use the app api instead of the web api, token is needed",
+	},
+	{
+		key.MangaplusAppApiToken,
+		"",
+		"The token used by the Mangaplus app api",
+	},
+	{
 		key.InstallerUser,
 		"metafates",
 		"Custom scrapers repository owner",

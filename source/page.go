@@ -22,6 +22,8 @@ type Page struct {
 	Index uint16 `json:"index" jsonschema:"description=Index of the page in the chapter."`
 	// Extension of the page image.
 	Extension string `json:"extension" jsonschema:"description=Extension of the page image."`
+	// Mangaplus decryption key
+	MangaPlusKey string `json:"mangapluskey" jsonschema:"description=MangaPlus decryption key for the page image."`
 	// Size of the page in bytes
 	Size uint64 `json:"-"`
 	// Contents of the page
@@ -93,6 +95,10 @@ func (p *Page) Download() error {
 
 	if err != nil {
 		return err
+	}
+
+	if p.MangaPlusKey != "" {
+		util.MangaplusDecryptImage(&buf, p.MangaPlusKey)
 	}
 
 	p.Contents = bytes.NewBuffer(buf)
