@@ -1,13 +1,14 @@
 package custom
 
 import (
+	"path/filepath"
+	"time"
+
 	"github.com/metafates/gache"
 	"github.com/metafates/mangal/filesystem"
 	"github.com/metafates/mangal/util"
 	"github.com/metafates/mangal/where"
 	"github.com/samber/mo"
-	"path/filepath"
-	"time"
 )
 
 type cacher[T any] struct {
@@ -17,7 +18,7 @@ type cacher[T any] struct {
 func newCacher[T any](name string) *cacher[T] {
 	return &cacher[T]{
 		internal: gache.New[map[string]T](&gache.Options{
-			Lifetime:   time.Hour * 24,
+			Lifetime:   time.Hour * 20,
 			Path:       filepath.Join(where.Cache(), util.SanitizeFilename(name)+".json"),
 			FileSystem: &filesystem.GacheFs{},
 		}),

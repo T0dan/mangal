@@ -19,7 +19,7 @@ func newCacher[T any](name string) *cacher[T] {
 		internal: gache.New[map[string]T](
 			&gache.Options{
 				Path:       filepath.Join(where.Cache(), name+".json"),
-				Lifetime:   time.Hour * 24,
+				Lifetime:   time.Hour * 20,
 				FileSystem: &filesystem.GacheFs{},
 			},
 		),
