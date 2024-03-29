@@ -7,4 +7,5 @@ type Source interface {
 	ChaptersOf(manga *Manga) ([]*Chapter, error)
 	PagesOf(chapter *Chapter) ([]*Page, error)
 	ID() string
+	StdLang() string
 }

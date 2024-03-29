@@ -14,6 +14,7 @@ func (o *Onepiecetube) Search(query string) ([]*source.Manga, error) {
 		ID:     "https://onepiece-tube.com/kapitel-mangaliste",
 		Source: o,
 	}
+	manga.Metadata.LanguageISO = "de"
 
 	mangas = append(mangas, &manga)
 

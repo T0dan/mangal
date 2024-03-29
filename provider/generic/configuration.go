@@ -20,12 +20,16 @@ type Extractor struct {
 	Number func(*goquery.Selection) string
 	// Cover function to get cover from element found by selector. Used by manga extractor
 	Cover func(*goquery.Selection) string
+	// Language function to get language from element found by selector. Used by manga extractor
+	Language func(*goquery.Selection) string
 }
 
 // Configuration is a generic scraper configuration that defines behavior of the scraper
 type Configuration struct {
 	// Name of the scraper
 	Name string
+	// Standard language of the scraper
+	StdLang string
 	// Delay between requests
 	Delay time.Duration
 	// Parallelism of the scraper

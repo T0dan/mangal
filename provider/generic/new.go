@@ -59,6 +59,7 @@ func New(conf *Configuration) source.Source {
 				Source:   &s,
 			}
 			manga.Metadata.Cover.ExtraLarge = s.config.MangaExtractor.Cover(selection)
+			manga.Metadata.LanguageISO = s.config.MangaExtractor.Language(selection)
 
 			s.mangas[path][i] = &manga
 		})

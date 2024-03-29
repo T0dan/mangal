@@ -30,13 +30,19 @@ func (m *Mangaplus) Search(query string) ([]*source.Manga, error) {
 
 		Escape_Path(title_detail_view.Title.TitleName)
 
-		mangas = append(mangas, &source.Manga{
+		manga := &source.Manga{
 			Name:   Escape_Path(title_detail_view.Title.TitleName),
 			URL:    "https://mangaplus.shueisha.co.jp/titles/" + strconv.FormatInt(int64(title_detail_view.Title.TitleId), 10),
 			Index:  0,
 			ID:     strconv.FormatInt(int64(title_detail_view.Title.TitleId), 10),
 			Source: m,
-		})
+		}
+		language := "en"
+		if title_detail_view.Title.Language == 7 {
+			language = "de"
+		}
+		manga.Metadata.LanguageISO = language
+		mangas = append(mangas, manga)
 
 		_ = m.cache.mangas_app.Set(query, mangas)
 	} else {
@@ -57,13 +63,19 @@ func (m *Mangaplus) Search(query string) ([]*source.Manga, error) {
 
 		Escape_Path(title_detail_view.Title.Name)
 
-		mangas = append(mangas, &source.Manga{
+		manga := &source.Manga{
 			Name:   Escape_Path(title_detail_view.Title.Name),
 			URL:    "https://mangaplus.shueisha.co.jp/titles/" + strconv.FormatInt(int64(title_detail_view.Title.TitleId), 10),
 			Index:  0,
 			ID:     strconv.FormatInt(int64(title_detail_view.Title.TitleId), 10),
 			Source: m,
-		})
+		}
+		language := "en"
+		if title_detail_view.Title.Language == 7 {
+			language = "de"
+		}
+		manga.Metadata.LanguageISO = language
+		mangas = append(mangas, manga)
 
 		_ = m.cache.mangas_web.Set(query, mangas)
 	}

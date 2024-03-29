@@ -165,7 +165,12 @@ Do no turn it off unless you have some issues`,
 	{
 		key.DownloaderCreateSourceDir,
 		true,
-		`Create a subdirectory for each Source`,
+		`Create a subdirectory for each source`,
+	},
+	{
+		key.DownloaderCreateNonStdLngSourceDir,
+		true,
+		`Create a seperate source subdirectory for each non standart language`,
 	},
 	{
 		key.DownloaderCreateMangaDir,

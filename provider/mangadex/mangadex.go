@@ -26,6 +26,10 @@ func (*Mangadex) ID() string {
 	return ID
 }
 
+func (*Mangadex) StdLang() string {
+	return "en"
+}
+
 func New() *Mangadex {
 	dex := &Mangadex{
 		client: mangodex.NewDexClient(),

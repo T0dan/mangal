@@ -2,15 +2,20 @@ package history
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/metafates/mangal/filesystem"
 	"github.com/metafates/mangal/source"
 	. "github.com/smartystreets/goconvey/convey"
-	"testing"
 )
 
 type testSource struct{}
 
 func (testSource) Name() string {
+	panic("")
+}
+
+func (testSource) StdLang() string {
 	panic("")
 }
 

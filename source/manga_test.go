@@ -1,13 +1,14 @@
 package source
 
 import (
+	"os"
+	"path/filepath"
+	"testing"
+
 	"github.com/metafates/mangal/filesystem"
 	"github.com/metafates/mangal/util"
 	"github.com/samber/lo"
 	. "github.com/smartystreets/goconvey/convey"
-	"os"
-	"path/filepath"
-	"testing"
 )
 
 func init() {
@@ -22,6 +23,10 @@ func (t testSource) Name() string {
 
 func (t testSource) ID() string {
 	return "test"
+}
+
+func (t testSource) StdLang() string {
+	return "en"
 }
 
 func (t testSource) Search(string) (mangas []*Manga, err error) {

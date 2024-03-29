@@ -24,8 +24,9 @@ import (
 )
 
 const (
-	Name = "MangaPlus"
-	ID   = Name + " built-in"
+	Name    = "MangaPlus"
+	ID      = Name + " built-in"
+	StdLang = "en"
 )
 
 type Mangaplus struct {
@@ -396,6 +397,10 @@ func (*Mangaplus) Name() string {
 
 func (*Mangaplus) ID() string {
 	return ID
+}
+
+func (*Mangaplus) StdLang() string {
+	return StdLang
 }
 
 func New() *Mangaplus {

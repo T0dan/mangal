@@ -2,6 +2,13 @@ package source
 
 import (
 	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
+
 	"github.com/metafates/mangal/anilist"
 	"github.com/metafates/mangal/filesystem"
 	"github.com/metafates/mangal/key"
@@ -11,12 +18,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/samber/mo"
 	"github.com/spf13/viper"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
-	"regexp"
-	"strings"
 )
 
 type date struct {
@@ -86,6 +87,8 @@ type Manga struct {
 		Chapters int `json:"chapters" jsonschema:"description=The amount of chapters the manga will have when completed."`
 		// URLs external URLs of the manga.
 		URLs []string `json:"urls" jsonschema:"description=External URLs of the manga."`
+		// Language of the manga.
+		LanguageISO string `json:"languageIso" jsonschema:"description=LanguageISO is the language of the manga."`
 	} `json:"metadata"`
 	cachedTempPath  string
 	populated       bool
@@ -104,11 +107,19 @@ func (m *Manga) SourceDirname() string {
 	return util.SanitizeFilenameWows(m.Source.Name())
 }
 
+func (m *Manga) SourceDirnameWithLang() string {
+	return util.SanitizeFilenameWows(m.Source.Name() + " [" + m.Metadata.LanguageISO + "]")
+}
+
 func (m *Manga) peekPath() string {
 	path := where.Downloads()
 
 	if viper.GetBool(key.DownloaderCreateSourceDir) {
-		path = filepath.Join(path, m.SourceDirname())
+		if viper.GetBool(key.DownloaderCreateNonStdLngSourceDir) && m.Metadata.LanguageISO != m.Source.StdLang() {
+			path = filepath.Join(path, m.SourceDirnameWithLang())
+		} else {
+			path = filepath.Join(path, m.SourceDirname())
+		}
 	}
 
 	if viper.GetBool(key.DownloaderCreateMangaDir) {

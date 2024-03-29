@@ -13,6 +13,7 @@ import (
 
 var Config = &generic.Configuration{
 	Name:            "Manganato",
+	StdLang:         "en",
 	Delay:           50 * time.Millisecond,
 	Parallelism:     50,
 	ReverseChapters: true,
@@ -35,6 +36,9 @@ var Config = &generic.Configuration{
 		},
 		Cover: func(selection *goquery.Selection) string {
 			return selection.Find("img").AttrOr("src", "")
+		},
+		Language: func(selection *goquery.Selection) string {
+			return "en"
 		},
 	},
 	ChapterExtractor: &generic.Extractor{

@@ -5,8 +5,9 @@ import (
 )
 
 const (
-	Name = "OnePiece-Tube"
-	ID   = Name + " built-in"
+	Name    = "OnePiece-Tube"
+	ID      = Name + " built-in"
+	StdLang = "de"
 )
 
 type Onepiecetube struct {
@@ -21,6 +22,10 @@ func (*Onepiecetube) Name() string {
 
 func (*Onepiecetube) ID() string {
 	return ID
+}
+
+func (*Onepiecetube) StdLang() string {
+	return StdLang
 }
 
 func New() *Onepiecetube {

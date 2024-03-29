@@ -23,6 +23,11 @@ func (s *Scraper) Name() string {
 	return s.config.Name
 }
 
+// Standard language of the scraper
+func (s *Scraper) StdLang() string {
+	return s.config.StdLang
+}
+
 // ID of the scraper
 func (s *Scraper) ID() string {
 	return s.config.ID()

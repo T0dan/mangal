@@ -3,21 +3,22 @@ package key
 // DefinedFieldsCount is the number of fields defined in this package.
 // You have to manually update this number when you add a new field
 // to check later if every field has a defined default value
-const DefinedFieldsCount = 60
+const DefinedFieldsCount = 61
 
 const (
-	DownloaderPath                = "downloader.path"
-	DownloaderChapterNameTemplate = "downloader.chapter_name_template"
-	DownloaderAsync               = "downloader.async"
-	DownloaderVolSafeFilename     = "downloader.volsafe_filename"
-	DownloaderCreateSourceDir     = "downloader.create_source_dir"
-	DownloaderCreateMangaDir      = "downloader.create_manga_dir"
-	DownloaderCreateVolumeDir     = "downloader.create_volume_dir"
-	DownloaderDefaultSources      = "downloader.default_sources"
-	DownloaderStopOnError         = "downloader.stop_on_error"
-	DownloaderDownloadCover       = "downloader.download_cover"
-	DownloaderRedownloadExisting  = "downloader.redownload_existing"
-	DownloaderReadDownloaded      = "downloader.read_downloaded"
+	DownloaderPath                     = "downloader.path"
+	DownloaderChapterNameTemplate      = "downloader.chapter_name_template"
+	DownloaderAsync                    = "downloader.async"
+	DownloaderVolSafeFilename          = "downloader.volsafe_filename"
+	DownloaderCreateSourceDir          = "downloader.create_source_dir"
+	DownloaderCreateNonStdLngSourceDir = "downloader.create_non_std_lng_source_dir"
+	DownloaderCreateMangaDir           = "downloader.create_manga_dir"
+	DownloaderCreateVolumeDir          = "downloader.create_volume_dir"
+	DownloaderDefaultSources           = "downloader.default_sources"
+	DownloaderStopOnError              = "downloader.stop_on_error"
+	DownloaderDownloadCover            = "downloader.download_cover"
+	DownloaderRedownloadExisting       = "downloader.redownload_existing"
+	DownloaderReadDownloaded           = "downloader.read_downloaded"
 )
 
 const (

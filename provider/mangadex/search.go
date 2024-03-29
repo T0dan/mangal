@@ -2,13 +2,14 @@ package mangadex
 
 import (
 	"fmt"
+	"log"
+	"net/url"
+	"strconv"
+
 	"github.com/darylhjd/mangodex"
 	"github.com/metafates/mangal/key"
 	"github.com/metafates/mangal/source"
 	"github.com/spf13/viper"
-	"log"
-	"net/url"
-	"strconv"
 )
 
 func (m *Mangadex) Search(query string) ([]*source.Manga, error) {
@@ -53,6 +54,7 @@ func (m *Mangadex) Search(query string) ([]*source.Manga, error) {
 			ID:     manga.ID,
 			Source: m,
 		}
+		m.Metadata.LanguageISO = viper.GetString(key.MangadexLanguage)
 
 		mangas = append(mangas, &m)
 	}

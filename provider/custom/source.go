@@ -2,14 +2,16 @@ package custom
 
 import (
 	"fmt"
+
 	"github.com/metafates/mangal/source"
 	lua "github.com/yuin/gopher-lua"
 )
 
 type luaSource struct {
-	name  string
-	state *lua.LState
-	cache struct {
+	name    string
+	stdLang string
+	state   *lua.LState
+	cache   struct {
 		mangas   *cacher[[]*source.Manga]
 		chapters *cacher[[]*source.Chapter]
 	}
@@ -19,10 +21,15 @@ func (s *luaSource) Name() string {
 	return s.name
 }
 
+func (s *luaSource) StdLang() string {
+	return s.stdLang
+}
+
 func newLuaSource(name string, state *lua.LState) (*luaSource, error) {
 	s := &luaSource{
-		name:  name,
-		state: state,
+		name:    name,
+		state:   state,
+		stdLang: "en",
 	}
 
 	cacheName := func(cacheFor string) string {
