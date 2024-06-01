@@ -7,6 +7,7 @@ import (
 
 	"github.com/metafates/mangal/log"
 	"github.com/metafates/mangal/provider/mangaplus/mangaplus_resp_app"
+	"github.com/metafates/mangal/provider/mangaplus/mangaplus_resp_web"
 	"github.com/metafates/mangal/source"
 )
 
@@ -37,15 +38,9 @@ func (m *Mangaplus) ChaptersOf(manga *source.Manga) ([]*source.Chapter, error) {
 		)
 
 		for _, chapter_collection := range title_detail_view.Chapters {
-			for _, chapter_desc := range chapter_collection.FirstChapterList {
-				api_chapters = append(api_chapters, chapter_desc)
-			}
-			for _, chapter_desc := range chapter_collection.ChapterList {
-				api_chapters = append(api_chapters, chapter_desc)
-			}
-			for _, chapter_desc := range chapter_collection.LastChapterList {
-				api_chapters = append(api_chapters, chapter_desc)
-			}
+			api_chapters = append(api_chapters, chapter_collection.FirstChapterList...)
+			api_chapters = append(api_chapters, chapter_collection.ChapterList...)
+			api_chapters = append(api_chapters, chapter_collection.LastChapterList...)
 		}
 
 		i := uint16(0)
@@ -127,7 +122,16 @@ func (m *Mangaplus) ChaptersOf(manga *source.Manga) ([]*source.Chapter, error) {
 		lastNumber := "0"
 		lastSubNumber := int(1)
 
-		for _, chapter := range append(title_detail_view.ChapterListGroup[0].FirstChapterList, title_detail_view.ChapterListGroup[1].LastChapterList...) {
+		var (
+			api_chapters []*mangaplus_resp_web.Chapter
+		)
+
+		for _, chapter_collection := range title_detail_view.ChapterListGroup {
+			api_chapters = append(api_chapters, chapter_collection.FirstChapterList...)
+			api_chapters = append(api_chapters, chapter_collection.LastChapterList...)
+		}
+
+		for _, chapter := range api_chapters {
 
 			number := ""
 
