@@ -37,11 +37,7 @@ func (m *Mangaplus) Search(query string) ([]*source.Manga, error) {
 			ID:     strconv.FormatInt(int64(title_detail_view.Title.TitleId), 10),
 			Source: m,
 		}
-		language := "en"
-		if title_detail_view.Title.Language == 7 {
-			language = "de"
-		}
-		manga.Metadata.LanguageISO = language
+		manga.Metadata.LanguageISO = m.GetAppLang(title_detail_view.Title.Language)
 		mangas = append(mangas, manga)
 
 		_ = m.cache.mangas_app.Set(query, mangas)
@@ -70,11 +66,7 @@ func (m *Mangaplus) Search(query string) ([]*source.Manga, error) {
 			ID:     strconv.FormatInt(int64(title_detail_view.Title.TitleId), 10),
 			Source: m,
 		}
-		language := "en"
-		if title_detail_view.Title.Language == 7 {
-			language = "de"
-		}
-		manga.Metadata.LanguageISO = language
+		manga.Metadata.LanguageISO = m.GetWebLang(title_detail_view.Title.Language)
 		mangas = append(mangas, manga)
 
 		_ = m.cache.mangas_web.Set(query, mangas)

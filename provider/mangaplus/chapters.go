@@ -127,7 +127,7 @@ func (m *Mangaplus) ChaptersOf(manga *source.Manga) ([]*source.Chapter, error) {
 		lastNumber := "0"
 		lastSubNumber := int(1)
 
-		for _, chapter := range append(title_detail_view.FirstChapterList, title_detail_view.LastChapterList...) {
+		for _, chapter := range append(title_detail_view.ChapterListGroup[0].FirstChapterList, title_detail_view.ChapterListGroup[1].LastChapterList...) {
 
 			number := ""
 

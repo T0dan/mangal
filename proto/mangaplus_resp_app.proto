@@ -4,14 +4,16 @@ package mangaplus_resp_app;
 
 option go_package = "provider/mangaplus/mangaplus_resp_app";
 
-enum Language {
-  ENGLISH = 0;
-  SPANISH = 1;
-  FRENCH = 2;
-  INDONESIAN = 3;
-  PORTUGUESE = 4;
-  RUSSIAN = 5;
-  THAI = 6;
+enum Lang {
+    LANG_ENGLISH = 0;
+    LANG_SPANISH = 1;
+    LANG_FRENCH = 2;
+    LANG_INDONESIAN = 3;
+    LANG_PORTUGUESE = 4;
+    LANG_RUSSIAN = 5;
+    LANG_THAI = 6;
+    LANG_GERMAN = 7;
+    LANG_VIETNAMESE = 9;
 }
 
 message Sns {
@@ -26,7 +28,7 @@ message Banner {
 }
 
 message Count {
-  Language language = 1;
+  Lang language = 1;
   int32 titles = 2;
 }
 
@@ -49,7 +51,7 @@ message Title {
   string imagePortrait = 4;
   string imageLandscape = 5;
   uint32 viewCount = 6;
-  Language language = 7;
+  Lang language = 7;
 }
 
 message Category {
@@ -74,7 +76,7 @@ message ErrorResult {
     }
 
     Button button = 5;
-    Language language = 6;
+    Lang language = 6;
   }
 
   Item default = 2;
@@ -109,8 +111,8 @@ message SuccessResult {
 }
 
 message ContentView {
-  Language default = 1;
-  Language display = 3;
+  Lang default = 1;
+  Lang display = 3;
 
   repeated Count counts = 5;
 }
@@ -207,7 +209,7 @@ message SettingsView {
 
 // -> /api/init_v2
 message InitView {
-  Language default = 1;
+  Lang default = 1;
   repeated Count counts = 2;
 }
 
@@ -232,7 +234,7 @@ message HomeView {
         int32 chapterId = 2;
         string chapterName = 3;
         string chapterSubTitle = 4;
-        Language language = 5;
+        Lang language = 5;
       }
 
       Metadata metadata = 3;
@@ -315,7 +317,7 @@ message TitleDetailView {
 
   message AllLanguage {
     uint32 titleId = 1;
-    Language language = 2;
+    Lang language = 2;
   }
   repeated AllLanguage allLanguage = 27;
 

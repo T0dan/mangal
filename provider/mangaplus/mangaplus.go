@@ -45,6 +45,54 @@ type Mangaplus struct {
 	}
 }
 
+func (m *Mangaplus) GetWebLang(l mangaplus_resp_web.Lang) string {
+	switch l {
+	case mangaplus_resp_web.Lang_LANG_ENGLISH:
+		return "en"
+	case mangaplus_resp_web.Lang_LANG_SPANISH:
+		return "es"
+	case mangaplus_resp_web.Lang_LANG_FRENCH:
+		return "fr"
+	case mangaplus_resp_web.Lang_LANG_INDONESIAN:
+		return "id"
+	case mangaplus_resp_web.Lang_LANG_PORTUGUESE:
+		return "pt"
+	case mangaplus_resp_web.Lang_LANG_RUSSIAN:
+		return "ru"
+	case mangaplus_resp_web.Lang_LANG_THAI:
+		return "th"
+	case mangaplus_resp_web.Lang_LANG_GERMAN:
+		return "de"
+	case mangaplus_resp_web.Lang_LANG_VIETNAMESE:
+		return "vi"
+	}
+	return "en"
+}
+
+func (m *Mangaplus) GetAppLang(l mangaplus_resp_app.Lang) string {
+	switch l {
+	case mangaplus_resp_app.Lang_LANG_ENGLISH:
+		return "en"
+	case mangaplus_resp_app.Lang_LANG_SPANISH:
+		return "es"
+	case mangaplus_resp_app.Lang_LANG_FRENCH:
+		return "fr"
+	case mangaplus_resp_app.Lang_LANG_INDONESIAN:
+		return "id"
+	case mangaplus_resp_app.Lang_LANG_PORTUGUESE:
+		return "pt"
+	case mangaplus_resp_app.Lang_LANG_RUSSIAN:
+		return "ru"
+	case mangaplus_resp_app.Lang_LANG_THAI:
+		return "th"
+	case mangaplus_resp_app.Lang_LANG_GERMAN:
+		return "de"
+	case mangaplus_resp_app.Lang_LANG_VIETNAMESE:
+		return "vi"
+	}
+	return "en"
+}
+
 func (m *Mangaplus) GetWebViewer(chapter_id string) (*mangaplus_resp_web.MangaViewer, error) {
 	req, err := http.NewRequest(http.MethodGet, m.webapi_url+"/manga_viewer", nil)
 	if err != nil {
@@ -102,7 +150,7 @@ func (m *Mangaplus) GetWebViewer(chapter_id string) (*mangaplus_resp_web.MangaVi
 }
 
 func (m *Mangaplus) GetWebTitleDetails(title_id string) (*mangaplus_resp_web.TitleDetailView, error) {
-	req, err := http.NewRequest(http.MethodGet, m.webapi_url+"/title_detail", nil)
+	req, err := http.NewRequest(http.MethodGet, m.webapi_url+"/title_detailV3", nil)
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -153,6 +201,59 @@ func (m *Mangaplus) GetWebTitleDetails(title_id string) (*mangaplus_resp_web.Tit
 	}
 
 	return resp_data.Success.TitleDetailView, nil
+}
+
+func (m *Mangaplus) GetWebAllTitlesView() (*mangaplus_resp_web.AllTitlesViewV2, error) {
+	req, err := http.NewRequest(http.MethodGet, m.webapi_url+"/title_list/allV2", nil)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	//req.Header.Set("Referer", "https://mangaplus.shueisha.co.jp/manga_list/all")
+	req.Header.Set("User-Agent", constant.UserAgent)
+
+	params := req.URL.Query()
+
+	//params.Add("format", "json")
+
+	req.URL.RawQuery = params.Encode()
+
+	resp, err := network.Client.Do(req)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	defer util.Ignore(resp.Body.Close)
+
+	if resp.StatusCode != http.StatusOK {
+		err = errors.New("http error: " + resp.Status)
+		log.Error(err)
+		return nil, err
+	}
+
+	buf, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp_data := &mangaplus_resp_web.Response{}
+
+	if err := proto.Unmarshal(buf, resp_data); err != nil {
+		err = errors.New("couldn't unmarschal response")
+		log.Error(err)
+		return nil, err
+	}
+
+	if resp_data.Success == nil {
+		err = errors.New("unsuccessfull request")
+		log.Error(err)
+		return nil, err
+	}
+
+	return resp_data.Success.AllTitlesViewV2, nil
 }
 
 func (m *Mangaplus) Generate_App_Secret() error {
@@ -302,7 +403,7 @@ func (m *Mangaplus) GetAppViewer(chapter_id string) (*mangaplus_resp_app.MangaVi
 }
 
 func (m *Mangaplus) GetAppTitleDetails(title_id string) (*mangaplus_resp_app.TitleDetailView, error) {
-	req, err := http.NewRequest(http.MethodGet, m.appapi_url+"/title_detailV2", nil)
+	req, err := http.NewRequest(http.MethodGet, m.appapi_url+"/title_detailV3", nil)
 	if err != nil {
 		log.Error(err)
 		return nil, err

@@ -50,6 +50,15 @@
             "args": ["config", "info"]
         },
         {
+            "name": "Clear cache",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "console": "integratedTerminal",
+            "args": ["clear", "-c"]
+        },
+        {
             "name": "Update ComicInfo",
             "type": "go",
             "request": "launch",
