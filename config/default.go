@@ -348,12 +348,12 @@ Use "any" to show all languages`,
 	},
 	{
 		key.MangaplusAppApiOsVer,
-		"29",
+		"36",
 		"The os version used for the Mangaplus app api",
 	},
 	{
 		key.MangaplusAppApiVer,
-		"1917",
+		"222",
 		"The app version used for the Mangaplus app api",
 	},
 	{
